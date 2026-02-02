@@ -2,10 +2,9 @@ package http
 
 import (
 	"encoding/json"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 	"log/slog"
 	"net/http"
-
-	httpSwagger "github.com/swaggo/http-swagger/v2"
 
 	"restservice/internal/usecase/subscription"
 )
@@ -30,9 +29,16 @@ func (h *Handler) Register(mux *http.ServeMux) {
 	mux.HandleFunc(summaryPath, h.handleSummary)
 	mux.HandleFunc(subscriptionsPath, h.handleSubscriptions)
 	mux.HandleFunc(subscriptionsPath+"/", h.handleSubscriptionByID)
-	mux.Handle(swaggerPath, httpSwagger.Handler(
-		httpSwagger.URL("/docs/swagger.json"),
-	))
+
+	mux.HandleFunc("/swagger/swagger.yaml", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./Swagger/swagger.yaml")
+	})
+
+	mux.HandleFunc("/swagger/swagger.json", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./Swagger/swagger.yaml")
+	})
+
+	mux.Handle(swaggerPath, httpSwagger.WrapHandler)
 }
 
 func (h *Handler) writeJSON(w http.ResponseWriter, status int, payload any) {

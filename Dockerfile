@@ -13,5 +13,6 @@ RUN apk add --no-cache postgresql-client
 COPY --from=builder /app/restservice /app/restservice
 COPY --from=builder /go/bin/goose /usr/local/bin/goose
 COPY migrations /app/migrations
+COPY Swagger /app/Swagger
 EXPOSE 8080
 CMD ["/app/restservice"]
