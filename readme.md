@@ -54,10 +54,3 @@
 
 `GET /api/subscriptions/summary?start_date=07-2025&end_date=09-2025&user_id=<uuid>&service_name=<name>`
 
-Ответ:
-
-```json
-{
-  "total": 1200
-}
-```
